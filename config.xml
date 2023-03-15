@@ -1,0 +1,18 @@
+<?xml version = '1.0' encoding = 'UTF-8' ?>
+<widget
+    android-versionCode = '1'
+    id = 'com.TeraFlop.InsulinCalc'
+    version = '1.0.0'
+    xmlns = 'https://www.w3.org/ns/widgets'>
+
+    <name>Insulin Calc</name>
+    <author>TeraFlop</author>
+    <description>Insulin calculator that provides a full explanation of what formula it used and how it ended up with the final result. Can factor in dexcom trending arrows into the final bolus calculation. Has night/day presets and saves the ratios and target upon hitting the calculate button.</description>
+
+    <preference name = 'orientation' value = 'portrait'/>
+	<preference name="SplashScreenDelay" value="1000" />
+	<preference name="AutoHideSplashScreen" value="true" />
+	<preference name="AndroidWindowSplashScreenAnimatedIcon" value="resources/splashTemplate.png" />
+	<preference name="AndroidWindowSplashScreenBackground" value="#000000" />
+	<preference name="SplashMaintainAspectRatio" value="true" />
+</widget>

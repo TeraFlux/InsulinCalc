@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Insulin Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+html,body{
+    margin: 0px;
+    padding:5px;
+    border: 0px;
+    user-select: none;
+}
+.DayNightHeader{
+    cursor: pointer;
+}
+#DayNightHeader{
+    width:100%;
+    height:60px;
+    text-align: center;
+    font-size:40px;
+    padding-bottom: 9px;
+    position:relative;
+    margin-bottom: 15px;
+}
+#DayTab{
+    width:calc(50% - 1px);
+    float:left;
+}
+#NightTab{
+    width:calc(50% - 1px);
+    float:right;
+}
+.numericInput{
+    user-select: none !important;
+    height:40px;
+    width:70px;
+    font-size:20px;
+    position: relative;
+    float:right;
+}
+.unitLabel{
+    position:absolute;
+    text-align: right;
+    width:25px;
+    height:20px;
+    font-size:20px;
+    margin-right:2px;
+    margin-top:7px;
+    z-index: 2;
+    right:0px;
+    padding:3px;
+
+    color:gray;
+}
+.inputLabel{
+    display:inline-block;
+    line-height: 22px;
+    font-size:22px;
+    height:22px;
+    position: relative;
+    margin-top:8px;
+    left:0px;
+    
+}
+#optionsContainer{
+    height:350px;
+    width: 100%;
+    font-size:20px;
+    position: relative;
+}
+.optionSet{
+    position:relative;
+    padding-bottom:5px;
+    width:100%;
+    left:0%;
+}
+.inputDivider{
+    border-bottom-width: 1px;
+    border-bottom-style: dotted;
+    border-bottom-color: black;
+    height:5px;
+    margin-bottom:4px;
+    margin-top:4px;
+    padding-bottom:5px;
+    padding-top:5px;
+
+}
+.answerDivider{
+    border-bottom-width: 1px;
+    border-bottom-style: dotted;
+    border-bottom-color: black;
+    height:10px;
+    margin-bottom:2px;
+
+}
+.pageDivider{
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: black;
+    height:10px;
+    margin-bottom:2px;
+}
+.submitButtonWrap{
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+.submitButton {
+  margin-top:10px;
+  width: 330px;
+  height: 60px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 30px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 600;
+  color: #000;
+  background-color: #fff;
+  border-width: 2px;
+  border-radius: 75px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  }
+
+.submitButton:hover {
+  background-color: #2EE59D;
+  box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+  color: #fff;
+  transform: translateY(-7px);
+}
+
+#Answers{
+    position:relative;
+    width:100%;
+    font-size:20px;
+}
+.doseOutput{
+    margin-top:10px;
+}
+#totalResult{
+    padding:2px;
+    padding-left:6px;
+    padding-right:6px;
+    background-color:lime;
+    
+}
+.activeTab{
+    border-right-color: black;
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-left-color: black;
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-top-color: black;
+    border-top-style: solid;
+    border-top-width: 1px;
+    color:black;
+}
+.inactiveTab{
+    border-bottom-color: black;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    color:gray;
+}
+.hidden{
+    display:none;
+}
+.explanationText{
+    font-size:80%;
+}
+.editIcon{
+    cursor:pointer;
+    float:right;
+    width:16px;
+    height:16px;
+    padding-top:12px;
+    padding-right:8px;
+    content: url("img/edit.png");
+}
+.dexcomIcon{
+    cursor:pointer;
+    float:right;
+    width:25px;
+    height:25px;
+    padding-top:10px;
+    padding-right:3px;
+    content: url("img/dexcom.png");
+}
+.dexcomArrowDisplay{
+    float:right;
+    width:40px;
+    height:25px;
+    padding-top:10px;
+    padding-right:3px;
+}
+#popUpContainer{
+    display:none;
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:100%;
+    height:100%;
+    background-color:rgb(225, 225, 225);
+    z-index:4;
+}
+#popUpInner{
+    position:fixed;
+    width:90%;
+    left:5%;
+    height:650px;
+    top:10px;
+    background-color:white;
+    z-index:5;
+}
+#popUpTitle{
+    height:25px;
+    width:100%;
+    font-size: 25px;
+    line-height: 25px;
+    margin-top:5px;
+    padding-bottom:5px;
+    text-align: center;
+    border-bottom-color: black;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+.dexIcon{
+    width:60px;
+    height:60px;
+    display:inline-block;
+    padding:5px;
+    cursor: pointer;
+}
+
+.arrowWrapper{
+    width:120px;
+    height:120px;
+    display:inline-block;
+    position:relative;
+    text-align: center;
+    font-size:15px;
+    box-shadow:2px 2px 1px 1px black;
+    margin:5px;
+    cursor:pointer;
+    padding:3px;
+}
+.arrowWrapper:hover{
+    box-shadow:1px 1px 1px 1px black;
+}
+.iconRowWRapper{
+    display:inline-block;
+    height:140px;
+    width:100%;
+}
+#levelArrowWrapper{
+    left: 50%;
+    margin-left:-45px;
+}
+.arrowLeft{
+    float:left;
+    margin-left:15px;
+}
+.arrowRight{
+    float:right;
+    margin-right:15px;
+
+}
+#dexLevel{
+    content: url("img/dexLevel.png");
+}
+#dexSlightDown{
+    content: url("img/dexSlightDown.png");
+}
+#dexSlightUp{
+    content: url("img/dexSlightUp.png");
+}
+#dexDown{
+    content: url("img/dexDown.png");
+}
+#dexUp{
+    content: url("img/dexUp.png");
+}
+#dexDoubleDown{
+    content: url("img/dexDoubleDown.png");
+}
+#dexDoubleUp{
+    content: url("img/dexDoubleUp.png");
+}
+#closePopUp{
+    width: 200px;
+    height: 40px;
+    position: relative;
+    font-family: 'Roboto', sans-serif;
+    font-size: 30px;
+    line-height:40px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    left:50%;
+    margin-left: -100px;
+    color: #000;
+    background-color: #fff;
+    border-color: black;
+    border-width: 2px;
+    border-radius: 75px;
+    border-style: solid;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    outline: none;
+    text-align:center;
+}
+#acceptTermsPopUp{
+    display:inline;
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:100%;
+    height:100%;
+    background-color:rgb(225, 225, 225);
+    z-index:4;
+}
+#acceptHead{
+    width:100%;
+    height:50px;
+    font-size:30px;
+    text-align: center;
+}
+#acceptInfo{
+    width:calc(100% -20px);
+    font-size:18px;
+    padding:10px;
+}
+#acceptButton{
+    width: 200px;
+    height: 40px;
+    position: relative;
+    font-family: 'Roboto', sans-serif;
+    font-size: 30px;
+    line-height:40px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    left:50%;
+    margin-left: -100px;
+    color: #000;
+    background-color: #fff;
+    border-color: black;
+    border-width: 2px;
+    border-radius: 75px;
+    border-style: solid;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    outline: none;
+    text-align:center;
+}
+
+    </style>    
+    <script>
+var activeTab="day";
+
+function selectTrend(value){
+    var intValue = parseInt(value.replace(/[+]/g, ""));
+    if(activeTab === "day"){
+        document.getElementById("dexcomDayArrowDisplay").innerHTML = value;
+        document.getElementById("dexcomDayArrowDisplay").dataset.glucose = intValue;
+    }else{
+        document.getElementById("dexcomNightArrowDisplay").innerHTML = value;
+        document.getElementById("dexcomNightArrowDisplay").dataset.glucose = intValue;
+    }
+    document.getElementById("popUpContainer").style.display = "none";
+}
+
+function displayDexcomOptions(){
+    document.getElementById("popUpContainer").style.display = "inline-block";
+}
+function closePopUp(){
+    document.getElementById("popUpContainer").style.display = "none";
+}
+
+function dayClick(){
+    activeTab = "day";
+    var dayTab=document.getElementById("DayTab");
+    var nightTab=document.getElementById("NightTab");
+    var optionSetDay=document.getElementById("OptionSetDay");
+    var optionSetNight=document.getElementById("OptionSetNight");
+    if(!dayTab.classList.contains("activeTab")){
+        dayTab.classList.add("activeTab");
+        dayTab.classList.remove("inactiveTab");
+        nightTab.classList.remove("activeTab");
+        nightTab.classList.add("inactiveTab");
+        optionSetDay.classList.remove("hidden");
+        optionSetNight.classList.add("hidden");
+    }
+}
+function nightClick(){
+    activeTab = "night";
+    var dayTab=document.getElementById("DayTab");
+    var nightTab=document.getElementById("NightTab");
+    var optionSetDay=document.getElementById("OptionSetDay");
+    var optionSetNight=document.getElementById("OptionSetNight");
+    if(!nightTab.classList.contains("activeTab")){
+        dayTab.classList.remove("activeTab");
+        dayTab.classList.add("inactiveTab");
+        nightTab.classList.add("activeTab");
+        nightTab.classList.remove("inactiveTab");
+        optionSetDay.classList.add("hidden");
+        optionSetNight.classList.remove("hidden");
+    }
+}
+
+function dayCalculate(){
+
+    let dayCarbsToEat = validateElementValue("dayCarbsToEat");
+    let dayCurrentGlucose = validateElementValue("dayCurrentGlucose");
+    let dayCarbRatio = validateElementValue("dayCarbRatio");
+    let dayCorrectionFactor = validateElementValue("dayCorrectionFactor");
+    let dayTarget = validateElementValue("dayTarget");
+    let dexComOffset = document.getElementById("dexcomDayArrowDisplay").dataset.glucose;
+    
+    if(dayCarbsToEat!==null && dayCurrentGlucose!==null && dayCarbRatio!==null && dayCorrectionFactor!==null && dayTarget!==null){
+
+        
+        let carbDoseComputed = printCarbComputation(dayCarbsToEat, dayCarbRatio);
+        let correctionDoseComputed = printCorrectionDose(dayCurrentGlucose, dayCorrectionFactor, dayTarget,dexComOffset);     
+        printTotalDose(dayCarbRatio,dayCurrentGlucose,carbDoseComputed, correctionDoseComputed,dayTarget);
+
+        setReadOnlyInput("dayCarbRatio", dayCarbRatio, true);
+        setReadOnlyInput("dayCorrectionFactor", dayCorrectionFactor, true);
+        setReadOnlyInput("dayTarget", dayTarget, true);
+
+    }
+}
+
+function nightCalculate(){
+    activeTab = "night";
+    let nightCarbsToEat = validateElementValue("nightCarbsToEat");
+    let nightCurrentGlucose = validateElementValue("nightCurrentGlucose");
+    let nightCarbRatio = validateElementValue("nightCarbRatio");
+    let nightCorrectionFactor = validateElementValue("nightCorrectionFactor");
+    let nightTarget = validateElementValue("nightTarget");
+    let dexComOffset = document.getElementById("dexcomNightArrowDisplay").dataset.glucose;
+
+    if(nightCarbsToEat!==null && nightCurrentGlucose!==null && nightCarbRatio!==null && nightCorrectionFactor!==null && nightTarget!==null){
+
+        let carbDoseComputed = printCarbComputation(nightCarbsToEat, nightCarbRatio);
+        let correctionDoseComputed = printCorrectionDose(nightCurrentGlucose, nightCorrectionFactor, nightTarget,dexComOffset);     
+        printTotalDose(nightCarbRatio,nightCurrentGlucose,carbDoseComputed, correctionDoseComputed,nightTarget);
+        setReadOnlyInput("nightCarbRatio", nightCarbRatio, true);
+        setReadOnlyInput("nightCorrectionFactor", nightCorrectionFactor, true);
+        setReadOnlyInput("nightTarget", nightTarget, true);
+
+    }
+}
+
+function printCarbComputation(carbsToEat, carbRatio){
+    let carbResult = Number.parseFloat(carbsToEat/carbRatio).toFixed(3);
+    document.getElementById("carbDoseComputed").innerHTML = `Carb Dose: <span class="explanationText">Carbs To Eat (${carbsToEat}) / Carb Ratio (${carbRatio}) = ${carbResult}</span>`;
+    return carbResult;
+}
+
+function printCorrectionDose(currentBlood, correctionFactor, targetBlood,dexcomOffset){
+    let glucoseDifference = (currentBlood - targetBlood);
+    let dexcomExplanation = "";
+    if(!isNaN(dexcomOffset)){
+        glucoseDifference = (currentBlood + parseInt(dexcomOffset) - targetBlood);
+        if(dexcomOffset < 0){
+            dexcomExplanation = `- Dexcom Trend (${Math.abs(dexcomOffset)}) `;
+        }else{
+            dexcomExplanation = `+ Dexcom Trend (${Math.abs(dexcomOffset)}) `;
+        }
+    }
+
+    let glucoseComputed = glucoseDifference / correctionFactor;
+    let correction3Decimal = Number.parseFloat(glucoseComputed).toFixed(3);
+
+    let outputString = `Correction Dose: <span class="explanationText">(Current (${currentBlood}) ${dexcomExplanation}- Target (${targetBlood})) / Correction Ratio (${correctionFactor}) = ${correction3Decimal}</span>`;
+    
+    document.getElementById("correctionDoseComputed").innerHTML = outputString;
+    return correction3Decimal;
+}
+
+function printTotalDose(carbRatio,currentGlucose,carbDoseComputed, correctionDoseComputed){
+
+    let correctionResult = Number.parseFloat(Number.parseFloat(carbDoseComputed) + Number.parseFloat(correctionDoseComputed)).toFixed(3);
+    let finalResult = Number.parseFloat(Math.floor(correctionResult * 2) / 2).toFixed(1);
+    if(finalResult < 0){
+        finalResult = `0.0 Insulin. <br>You are at a ${Math.abs(Math.round(carbRatio * correctionResult))}g carb deficit.`
+        if(currentGlucose < 56){
+            finalResult= `${finalResult}<br>You are below 55mg, recommend taking immediate action to raise blood sugar level.`;
+        }else if(currentGlucose < 70){
+            finalResult= `${finalResult}<br>You are below 70mg, recommend taking 15g fast acting carbs and checking again in 15 minutes.`;
+        }
+    } else if(currentGlucose > 249){
+        finalResult = `${finalResult}u Insulin.<br>Blood Glucose above 250, consider checking ketone levels.`;
+    }else{
+        finalResult = `${finalResult}u Insulin.`;
+    }
+    document.getElementById("totalDoseComputed").innerHTML = `Total Dose: <span class="explanationText">Carb (${carbDoseComputed}) + Correction (${correctionDoseComputed}) = ${correctionResult} (Round Down) = </span><span id ="totalResult">${finalResult}</span>`;
+}
+
+function validateElementValue(elementId){
+    let elementValue = parseInt(document.getElementById(elementId).value);    
+    if(isNaN(elementValue) === false && elementValue > -1){
+        document.getElementById(elementId).style.backgroundColor  = "";
+        return elementValue;
+    }else{
+        var element=document.getElementById(elementId).style.backgroundColor  = "#c70017";
+        element.readOnly = false;
+        return null;
+    }
+}
+
+function setReadOnlyInput(inputName, value, setReadOnly){
+
+    localStorage.setItem(inputName, value);
+    var element=document.getElementById(inputName);
+    element.value = value;
+    if(setReadOnly===true){
+        element.style.cursor = "context-menu";
+        element.readOnly = true;
+    }else{
+        element.readOnly = false;
+        element.style.cursor = "text";
+    }
+    
+}
+
+function acceptedTerms(){
+    localStorage.setItem("acceptedTerms", "true");
+    document.getElementById("acceptTermsPopUp").style.display = "none";
+}
+
+function onLoadFunction(){
+    let acceptedTerms = localStorage.getItem("acceptedTerms");
+    console.log(acceptedTerms);
+    if(acceptedTerms === "true"){
+        console.log("hide accept terms");
+        document.getElementById("acceptTermsPopUp").style.display = "none";
+        let dayCarbRatio = localStorage.getItem("dayCarbRatio");
+        let dayCorrectionFactor = localStorage.getItem("dayCorrectionFactor");
+        let dayTarget = localStorage.getItem("dayTarget");
+        if(dayCarbRatio){
+            document.getElementById("dayCarbRatio").value = dayCarbRatio;
+            setReadOnlyInput("dayCarbRatio", dayCarbRatio, true);
+        }
+        if(dayCorrectionFactor){
+            document.getElementById("dayCorrectionFactor").value = dayCorrectionFactor;
+            setReadOnlyInput("dayCorrectionFactor", dayCorrectionFactor, true);
+        }
+        if(dayTarget){
+            document.getElementById("dayTarget").value = dayTarget;
+            setReadOnlyInput("dayTarget",dayTarget, true);
+        }
+
+        let nightCarbRatio = localStorage.getItem("nightCarbRatio");
+        let nightCorrectionFactor = localStorage.getItem("nightCorrectionFactor");
+        let nightTarget = localStorage.getItem("nightTarget");
+        if(nightCarbRatio){
+            document.getElementById("nightCarbRatio").value = nightCarbRatio;
+            setReadOnlyInput("nightCarbRatio", nightCarbRatio, true);
+        }
+        if(nightCorrectionFactor){
+            document.getElementById("nightCorrectionFactor").value = nightCorrectionFactor;
+            setReadOnlyInput("nightCorrectionFactor", nightCorrectionFactor, true);
+        }
+        if(nightTarget){
+            document.getElementById("nightTarget").value = nightTarget;
+            setReadOnlyInput("nightTarget", nightTarget, true);
+        }
+    }else{
+        console.log("show accept terms");
+    }
+
+}
+    </script>
+</head>
+<body onload="onLoadFunction()">
+<div id="DayNightHeader"><div id="DayTab" class="DayNightHeader activeTab" onclick="dayClick()">DAY</div><div id="NightTab" class="DayNightHeader inactiveTab" onclick="nightClick()">NIGHT</div></div>
+<div id="optionsContainer">
+<div id="OptionSetDay" class="optionSet">
+    <label for="dayCarbsToEat" class="inputLabel">Carbs To Eat</label>
+    <span class="unitLabel">g</span><input type="number" id="dayCarbsToEat" class="numericInput" name="dayCarbsToEat">
+    <div class="inputDivider"></div>
+    <span class="unitLabel">mg</span><label for="dayCurrentGlucose" class="inputLabel">Current Glucose</label>
+    <input type="number" id="dayCurrentGlucose" class="numericInput" name="dayCurrentGlucose"><div id="dexcomDayArrowDisplay" class="dexcomArrowDisplay"></div><div class="dexcomIcon" onclick="displayDexcomOptions()"></div>
+    <div class="inputDivider"></div>
+    <span class="unitLabel">g</span><label for="dayCarbRatio" class="inputLabel">Carb Ratio</label>
+    <input type="number" id="dayCarbRatio" class="numericInput" name="dayCarbRatio"><div class="editIcon" onclick="setReadOnlyInput('dayCarbRatio','','false')"></div>
+    <div class="inputDivider"></div>
+    <label for="dayCorrectionFactor" class="inputLabel">Correction</label>
+    <span class="unitLabel">mg</span><input type="number" id="dayCorrectionFactor" class="numericInput" name="dayCorrectionFactor"><div class="editIcon" onclick="setReadOnlyInput('dayCorrectionFactor','','false')"></div>
+    <div class="inputDivider"></div>
+    <label for="dayTarget" class="inputLabel">Target</label>
+    <span class="unitLabel">mg</span><input type="number" id="dayTarget" class="numericInput" name="dayTarget"><div class="editIcon" onclick="setReadOnlyInput('dayTarget','','false')"></div>
+    <div class="inputDivider"></div>
+    <div class="submitButtonWrap"><button id="daySubmit" class="submitButton" onclick="dayCalculate()">Calculate</button></div>
+</div>
+<div id="OptionSetNight" class="optionSet hidden">
+    <label for="nightCarbsToEat" class="inputLabel">Carbs To Eat</label>
+    <span class="unitLabel">g</span><input type="number" id="nightCarbsToEat" class="numericInput" name="nightCarbsToEat">
+    <div class="inputDivider"></div>
+    <label for="nightCurrentGlucose" class="inputLabel">Current Glucose</label>
+    <span class="unitLabel">mg</span><input type="number" id="nightCurrentGlucose" class="numericInput" name="nightCurrentGlucose"><div id="dexcomNightArrowDisplay" class="dexcomArrowDisplay"></div><div class="dexcomIcon" onclick="displayDexcomOptions()"></div>
+    <div class="inputDivider"></div>
+    <label for="nightCarbRatio" class="inputLabel">Carb Ratio</label>
+    <span class="unitLabel">g</span><input type="number" id="nightCarbRatio" class="numericInput" name="nightCarbRatio"><div class="editIcon" onclick="setReadOnlyInput('nightCarbRatio','','false')"></div>
+    <div class="inputDivider"></div>
+    <label for="nightCorrectionFactor" class="inputLabel">Correction</label>
+    <span class="unitLabel">mg</span><input type="number" id="nightCorrectionFactor" class="numericInput" name="nightCorrectionFactor"><div class="editIcon" onclick="setReadOnlyInput('nightCorrectionFactor','','false')"></div>
+    <div class="inputDivider"></div>
+    <label for="nightTarget" class="inputLabel">Target</label>
+    <span class="unitLabel">mg</span><input type="number" id="nightTarget" class="numericInput" name="nightTarget"><div class="editIcon" onclick="setReadOnlyInput('nightTarget','','false')"></div>
+    <div class="inputDivider"></div>
+    <div class="submitButtonWrap"><button id="nightSubmit" class="submitButton" onclick="nightCalculate()">Calculate</button></div>
+</div>
+</div>
+<div class="pageDivider"></div>
+<div id="Answers"><div id="carbDoseComputed" class="doseOutput">Carb Dose:</div><div class="answerDivider"></div><div id="correctionDoseComputed" class="doseOutput">Correction Dose:</div><div class="answerDivider"></div><div id="totalDoseComputed" class="doseOutput">Total Dose:</div><div class="answerDivider"></div></div>
+
+<div id="popUpContainer" onclick="closePopUp()">
+    <div id="popUpInner" onclick="event.stopPropagation();">
+        <div id="popUpTitle">Dexcom Trending Arrow</div>
+        <div id="popUpContent">
+            <div class="iconRowWRapper" style="height:110px;">
+                <div class="arrowWrapper" id="levelArrowWrapper" style="height:95px;" onclick="selectTrend('+0')">
+                    <span class="arrowLabel">Level (0mg)</span>
+                    <div id="dexLevel" class="dexIcon" ></div>
+                </div>
+            </div>
+            <div class="iconRowWRapper">
+                <div class="arrowWrapper arrowLeft" onclick="selectTrend('-45')">
+                    <span class="arrowLabel">Slight Down (-45mg)</span>
+                    <div id="dexSlightDown" class="dexIcon" ></div>
+                </div>
+                <div class="arrowWrapper arrowRight" onclick="selectTrend('+45')">
+                    <span class="arrowLabel">Slight Up (+45mg)</span>
+                    <div id="dexSlightUp" class="dexIcon" ></div>
+                </div>
+            </div>
+            <div class="iconRowWRapper">
+                <div class="arrowWrapper arrowLeft" onclick="selectTrend('-75')">
+                    <span class="arrowLabel">Straight Down (-75mg)</span>
+                    <div id="dexDown" class="dexIcon" ></div>
+                </div>
+                <div class="arrowWrapper arrowRight" onclick="selectTrend('+75')">
+                    <span class="arrowLabel">Straight Up (+75mg)</span>
+                    <div id="dexUp" class="dexIcon" ></div>
+                </div>
+            </div>
+            <div class="iconRowWRapper">
+                <div class="arrowWrapper arrowLeft" onclick="selectTrend('-90')">
+                    <span class="arrowLabel">Double Down (-90mg)</span>
+                    <div id="dexDoubleDown" class="dexIcon" ></div>
+                </div>
+                <div class="arrowWrapper arrowRight" onclick="selectTrend('+90')">
+                    <span class="arrowLabel">Double Up (+90mg)</span>
+                    <div id="dexDoubleUp" class="dexIcon" ></div>
+                </div>
+            </div>
+        <div id="closePopUp" onclick="closePopUp()">Close</div>
+        </div> 
+    </div>
+</div>
+
+<div id="acceptTermsPopUp">
+    <div id="acceptHead">Thank you for installing Insulin Calc!</div><br>
+    <div id="acceptInfo">This app is intended to help you make insulin dosing calculations, however
+        you are <b>strongly</b> encouraged to confirm any information obtained from or through 
+        this app with your professional healthcare provider and to review all 
+        information regarding any medical treatment with your professional healthcare provider. This app is not associated with dexcom or any other medical providers. 
+        For medical emergencies call 911 immediately.</div>
+    <div id="acceptButton" onclick="acceptedTerms()">Accept</div>
+</div>
+
+</body>
+</html>
